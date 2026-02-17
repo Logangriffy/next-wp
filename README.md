@@ -1,357 +1,274 @@
-# Next WP
+# Payload Website Template
 
-A modern headless WordPress starter built with Next.js 16, React 19, and TypeScript.
+This is the official [Payload Website Template](https://github.com/payloadcms/payload/blob/main/templates/website). Use it to power websites, blogs, or portfolios from small to enterprise. This repo includes a fully-working backend, enterprise-grade admin panel, and a beautifully designed, production-ready website.
 
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/next-wp?referralCode=AJtQpy&utm_medium=integration&utm_source=template&utm_campaign=generic)
+You can deploy to Vercel, using Neon and Vercel Blob Storage with one click:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2F9d8dev%2Fnext-wp&env=WORDPRESS_URL,WORDPRESS_HOSTNAME,WORDPRESS_WEBHOOK_SECRET&envDescription=Add%20WordPress%20URL%20with%20Rest%20API%20enabled%20(ie.%20https%3A%2F%2Fwp.example.com)%2C%20the%20hostname%20for%20Image%20rendering%20in%20Next%20JS%20(ie.%20wp.example.com)%2C%20and%20a%20secret%20key%20for%20secure%20revalidation&project-name=next-wp&repository-name=next-wp&demo-title=Next%20JS%20and%20WordPress%20Starter&demo-url=https%3A%2F%2Fwp.9d8.dev)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?build-command=pnpm%20run%20ci&demo-description=A%20production-ready%20website%20built%20with%20Payload%2C%20the%20only%20Next.js-native%20CMS.&demo-image=%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F1EyBgbstPv4d6NMwzldDyY%2F58d07399ce2a2bb51341125fe4f51572%2Fpayloadwebsitetempate_vercel_thumbnail.jpg&demo-title=Payload%20Website%20Starter&demo-url=https%3A%2F%2Fpayload-vercel-website-demo.vercel.app%2F&env=PAYLOAD_SECRET%2CCRON_SECRET%2CPREVIEW_SECRET&from=templates&project-name=Payload%20Website%20Starter&repository-name=payload-website-starter&repository-url=https%3A%2F%2Fgithub.com%2Fpayloadcms%2Fpayload%2Ftree%2Fmain%2Ftemplates%2Fwith-vercel-website&skippable-integrations=1&stores=%255B%257B%2522type%2522%253A%2522integration%2522%252C%2522productSlug%2522%253A%2522neon%2522%252C%2522integrationSlug%2522%253A%2522neon%2522%257D%252C%257B%2522type%2522%253A%2522blob%2522%257D%255D)
 
-![Next WP Screenshot](https://github.com/user-attachments/assets/8b268c36-eb0d-459f-b9f1-b5f129bd29bc)
+This template is right for you if you are working on:
 
-> **[Live Demo](https://wp.9d8.dev)** | **[Video Tutorial](https://www.youtube.com/watch?v=JZc1-BcOvYw)** | **[Headless Theme (761)](https://github.com/9d8dev/761)**
->
-> Need a WooCommerce version? Try [next-woo](https://github.com/9d8dev/next-woo)
+- A personal or enterprise-grade website, blog, or portfolio
+- A content publishing platform with a fully featured publication workflow
+- Exploring the capabilities of Payload
 
-## Table of Contents
+Core features:
 
-- [Quick Start](#quick-start)
-- [Prerequisites](#prerequisites)
-- [Environment Variables](#environment-variables)
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Deployment](#deployment)
-  - [Railway (Recommended)](#railway-recommended)
-  - [Vercel](#vercel)
-  - [Local Development](#local-development)
-- [WordPress API Functions](#wordpress-api-functions)
-- [Cache Revalidation](#cache-revalidation)
-- [Customization](#customization)
-- [Troubleshooting](#troubleshooting)
-- [Scripts](#scripts)
-- [Contributing](#contributing)
-- [License](#license)
-- [Credits](#credits)
+- [Pre-configured Payload Config](#how-it-works)
+- [Authentication](#users-authentication)
+- [Access Control](#access-control)
+- [Layout Builder](#layout-builder)
+- [Draft Preview](#draft-preview)
+- [Live Preview](#live-preview)
+- [On-demand Revalidation](#on-demand-revalidation)
+- [SEO](#seo)
+- [Search](#search)
+- [Redirects](#redirects)
+- [Jobs and Scheduled Publishing](#jobs-and-scheduled-publish)
+- [Website](#website)
 
-## Quick Start
+## Quick start – Deploying to Vercel
+
+Click the 'Deploy' button to spin up this template directly into Vercel hosting. It will first prompt you save this template into your own Github repo so that you own the code and can make any changes you want to it. You will be prompted to set up the required services and secrets. Once the app is built and deployed, you can visit your site using the generated URL.
+
+Set up the following services and secrets and then once the app has been built and deployed you will be able to visit your site at the generated URL.
+
+From this point on you can access your admin panel at `/admin` of your app URL, create an admin user and then click the 'Seed the database' button in the dashboard to add content into your app.
+
+### Services
+
+This project uses the following services integrated into Vercel which you will need to click "Add" and "Connect" for:
+
+Neon Database - Postgres-based cloud database used to host your data
+
+Vercel Blob Storage - object storage used to host your files such as images and videos
+
+The connection variables will automatically be setup for you on Vercel when these services are connected.
+
+#### Secrets
+
+You will be prompted to add the following secret values to your project. These should be long unguessable strong passwords, you can also use a password manager to generate one for these.
+
+CRON_SECRET - used for running cron on Vercel
+
+PAYLOAD_SECRET - used by Payload to sign secrets like JWT tokens
+
+PREVIEW_SECRET - used by Payload for secured live previews of your content
+
+## Quick Start - local setup
+
+To spin up this template locally, follow these steps:
+
+### Clone
+
+After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
+
+### Development
+
+1. First [clone the repo](#clone) if you have not done so already
+2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `POSTGRES_URL` and `BLOB_READ_WRITE_TOKEN` from your Vercel project to your `.env` if you want to use Vercel Blob and the Neon database that was created for you.
+
+   > _NOTE: If the connection string value includes `localhost` or `127.0.0.1`, the code will automatically use a normal postgres adapter instead of Vercel._. You can override this functionality by setting `forceUseVercelPostgres: true` if desired.
+
+3. `pnpm install && pnpm dev` to install dependencies and start the dev server
+4. open `http://localhost:3000` to open the app in your browser
+
+That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+
+#### Docker (Optional)
+
+If you prefer to use Docker for local development instead of a local Postgres instance, the provided docker-compose.yml file can be used.
+
+To do so, follow these steps:
+
+- Modify the `POSTGRES_URL` in your `.env` file to `postgres://postgres@localhost:54320/<dbname>`
+- Modify the `docker-compose.yml` file's `POSTGRES_DB` to match the above `<dbname>`
+- Run `docker-compose up` to start the database, optionally pass `-d` to run in the background.
+
+## How it works
+
+The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:
+
+### Collections
+
+See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
+
+- #### Users (Authentication)
+
+  Users are auth-enabled collections that have access to the admin panel and unpublished content. See [Access Control](#access-control) for more details.
+
+  For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/main/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
+
+- #### Posts
+
+  Posts are used to generate blog posts, news articles, or any other type of content that is published over time. All posts are layout builder enabled so you can generate unique layouts for each post using layout-building blocks, see [Layout Builder](#layout-builder) for more details. Posts are also draft-enabled so you can preview them before publishing them to your website, see [Draft Preview](#draft-preview) for more details.
+
+- #### Pages
+
+  All pages are layout builder enabled so you can generate unique layouts for each page using layout-building blocks, see [Layout Builder](#layout-builder) for more details. Pages are also draft-enabled so you can preview them before publishing them to your website, see [Draft Preview](#draft-preview) for more details.
+
+- #### Media
+
+  This is the uploads enabled collection used by pages, posts, and projects to contain media like images, videos, downloads, and other assets. It features pre-configured sizes, focal point and manual resizing to help you manage your pictures.
+
+- #### Categories
+
+  A taxonomy used to group posts together. Categories can be nested inside of one another, for example "News > Technology". See the official [Payload Nested Docs Plugin](https://payloadcms.com/docs/plugins/nested-docs) for more details.
+
+### Globals
+
+See the [Globals](https://payloadcms.com/docs/configuration/globals) docs for details on how to extend this functionality.
+
+- `Header`
+
+  The data required by the header on your front-end like nav links.
+
+- `Footer`
+
+  Same as above but for the footer of your site.
+
+## Access control
+
+Basic access control is setup to limit access to various content based based on publishing status.
+
+- `users`: Users can access the admin panel and create or edit content.
+- `posts`: Everyone can access published posts, but only users can create, update, or delete them.
+- `pages`: Everyone can access published pages, but only users can create, update, or delete them.
+
+For more details on how to extend this functionality, see the [Payload Access Control](https://payloadcms.com/docs/access-control/overview#access-control) docs.
+
+## Layout Builder
+
+Create unique page layouts for any type of content using a powerful layout builder. This template comes pre-configured with the following layout building blocks:
+
+- Hero
+- Content
+- Media
+- Call To Action
+- Archive
+
+Each block is fully designed and built into the front-end website that comes with this template. See [Website](#website) for more details.
+
+## Lexical editor
+
+A deep editorial experience that allows complete freedom to focus just on writing content without breaking out of the flow with support for Payload blocks, media, links and other features provided out of the box. See [Lexical](https://payloadcms.com/docs/lexical/overview) docs.
+
+## Draft Preview
+
+All posts and pages are draft-enabled so you can preview them before publishing them to your website. To do this, these collections use [Versions](https://payloadcms.com/docs/configuration/collections#versions) with `drafts` set to `true`. This means that when you create a new post, project, or page, it will be saved as a draft and will not be visible on your website until you publish it. This also means that you can preview your draft before publishing it to your website. To do this, we automatically format a custom URL which redirects to your front-end to securely fetch the draft version of your content.
+
+Since the front-end of this template is statically generated, this also means that pages, posts, and projects will need to be regenerated as changes are made to published documents. To do this, we use an `afterChange` hook to regenerate the front-end when a document has changed and its `_status` is `published`.
+
+For more details on how to extend this functionality, see the official [Draft Preview Example](https://github.com/payloadcms/payload/tree/examples/draft-preview).
+
+## Live preview
+
+In addition to draft previews you can also enable live preview to view your end resulting page as you're editing content with full support for SSR rendering. See [Live preview docs](https://payloadcms.com/docs/live-preview/overview) for more details.
+
+## On-demand Revalidation
+
+We've added hooks to collections and globals so that all of your pages, posts, footer, or header changes will automatically be updated in the frontend via on-demand revalidation supported by Nextjs.
+
+> Note: if an image has been changed, for example it's been cropped, you will need to republish the page it's used on in order to be able to revalidate the Nextjs image cache.
+
+## SEO
+
+This template comes pre-configured with the official [Payload SEO Plugin](https://payloadcms.com/docs/plugins/seo) for complete SEO control from the admin panel. All SEO data is fully integrated into the front-end website that comes with this template. See [Website](#website) for more details.
+
+## Search
+
+This template also pre-configured with the official [Payload Search Plugin](https://payloadcms.com/docs/plugins/search) to showcase how SSR search features can easily be implemented into Next.js with Payload. See [Website](#website) for more details.
+
+## Redirects
+
+If you are migrating an existing site or moving content to a new URL, you can use the `redirects` collection to create a proper redirect from old URLs to new ones. This will ensure that proper request status codes are returned to search engines and that your users are not left with a broken link. This template comes pre-configured with the official [Payload Redirects Plugin](https://payloadcms.com/docs/plugins/redirects) for complete redirect control from the admin panel. All redirects are fully integrated into the front-end website that comes with this template. See [Website](#website) for more details.
+
+## Jobs and Scheduled Publish
+
+We have configured [Scheduled Publish](https://payloadcms.com/docs/versions/drafts#scheduled-publish) which uses the [jobs queue](https://payloadcms.com/docs/jobs-queue/jobs) in order to publish or unpublish your content on a scheduled time. The tasks are run on a cron schedule and can also be run as a separate instance if needed.
+
+> Note: When deployed on Vercel, depending on the plan tier, you may be limited to daily cron only.
+
+## Website
+
+This template includes a beautifully designed, production-ready front-end built with the [Next.js App Router](https://nextjs.org), served right alongside your Payload app in a instance. This makes it so that you can deploy both your backend and website where you need it.
+
+Core features:
+
+- [Next.js App Router](https://nextjs.org)
+- [TypeScript](https://www.typescriptlang.org)
+- [React Hook Form](https://react-hook-form.com)
+- [Payload Admin Bar](https://github.com/payloadcms/payload/tree/main/packages/admin-bar)
+- [TailwindCSS styling](https://tailwindcss.com/)
+- [shadcn/ui components](https://ui.shadcn.com/)
+- User Accounts and Authentication
+- Fully featured blog
+- Publication workflow
+- Dark mode
+- Pre-made layout building blocks
+- SEO
+- Search
+- Redirects
+- Live preview
+
+## Development
+
+To spin up this example locally, follow the [Quick Start](#quick-start). Then [Seed](#seed) the database with a few pages, posts, and projects.
+
+### Working with Postgres
+
+Postgres and other SQL-based databases follow a strict schema for managing your data. In comparison to our MongoDB adapter, this means that there's a few extra steps to working with Postgres.
+
+Note that often times when making big schema changes you can run the risk of losing data if you're not manually migrating it.
+
+#### Local development
+
+Ideally we recommend running a local copy of your database so that schema updates are as fast as possible. By default the Postgres adapter has `push: true` for development environments. This will let you add, modify and remove fields and collections without needing to run any data migrations.
+
+If your database is pointed to production you will want to set `push: false` otherwise you will risk losing data or having your migrations out of sync.
+
+#### Migrations
+
+[Migrations](https://payloadcms.com/docs/database/migrations) are essentially SQL code versions that keeps track of your schema. When deploy with Postgres you will need to make sure you create and then run your migrations.
+
+Locally create a migration
 
 ```bash
-# Clone the repository
-git clone https://github.com/9d8dev/next-wp.git
-cd next-wp
-
-# Install dependencies
-pnpm install
-
-# Set up environment variables
-cp .env.example .env.local
-# Edit .env.local with your WordPress URL and credentials
-
-# Start development server
-pnpm dev
+pnpm payload migrate:create
 ```
 
-Your site is now running at `http://localhost:3000`.
+This creates the migration files you will need to push alongside with your new configuration.
 
-## Prerequisites
-
-- **Node.js** 18.17 or later
-- **pnpm** 8.0 or later (recommended) or npm/yarn
-- **WordPress** site with REST API enabled (default in WordPress 4.7+)
-
-## Environment Variables
-
-Create a `.env.local` file in the root directory:
+On the server after building and before running `pnpm start` you will want to run your migrations
 
 ```bash
-WORDPRESS_URL="https://your-wordpress-site.com"    # Full WordPress URL
-WORDPRESS_HOSTNAME="your-wordpress-site.com"       # Domain for image optimization
-WORDPRESS_WEBHOOK_SECRET="your-secret-key-here"    # Secret for cache revalidation
+pnpm payload migrate
 ```
 
-## Features
+This command will check for any migrations that have not yet been run and try to run them and it will keep a record of migrations that have been run in the database.
 
-- **Type-safe WordPress API** - Full TypeScript support with comprehensive type definitions
-- **Server-side pagination** - Efficient handling of large content libraries
-- **Automatic cache revalidation** - WordPress plugin for instant updates
-- **Dynamic routes** - Posts, pages, authors, categories, and tags
-- **Search & filtering** - Real-time search with debouncing
-- **Dynamic sitemap** - Auto-generated XML sitemap
-- **OG image generation** - Dynamic social media cards
-- **Dark mode** - Built-in theme switching
-- **shadcn/ui components** - Beautiful, accessible UI components
-- **Responsive design** - Mobile-first with Tailwind CSS v4
+### Docker
 
-## Project Structure
+Alternatively, you can use [Docker](https://www.docker.com) to spin up this template locally. To do so, follow these steps:
 
-```
-next-wp/
-├── app/                      # Next.js App Router
-│   ├── api/
-│   │   ├── og/              # OG image generation
-│   │   └── revalidate/      # Cache revalidation webhook
-│   ├── pages/[slug]/        # Dynamic WordPress pages
-│   ├── posts/
-│   │   ├── [slug]/          # Individual post pages
-│   │   ├── authors/         # Author archive
-│   │   ├── categories/      # Category archive
-│   │   └── tags/            # Tag archive
-│   ├── layout.tsx           # Root layout
-│   ├── page.tsx             # Homepage
-│   └── sitemap.ts           # Dynamic sitemap
-├── components/
-│   ├── posts/               # Post-related components
-│   │   ├── post-card.tsx    # Post card component
-│   │   ├── filter.tsx       # Filter controls
-│   │   └── search-input.tsx # Search component
-│   ├── nav/                 # Navigation components
-│   ├── theme/               # Theme toggle
-│   └── ui/                  # shadcn/ui components
-├── lib/
-│   ├── wordpress.ts         # WordPress API functions
-│   └── wordpress.d.ts       # TypeScript definitions
-├── plugin/                  # WordPress revalidation plugin
-├── menu.config.ts           # Navigation configuration
-├── site.config.ts           # Site metadata
-└── CLAUDE.md               # AI assistant guidelines
-```
+1. Follow [steps 1 and 2 from above](#development), the docker-compose file will automatically use the `.env` file in your project root
+1. Next run `docker-compose up`
+1. Follow [steps 4 and 5 from above](#development) to login and create your first admin user
 
-## Deployment
+That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
 
-### Railway (Recommended)
+### Seed
 
-Railway deploys the complete stack with one click: MySQL + WordPress + Next.js.
+To seed the database with a few pages, posts, and projects you can click the 'seed database' link from the admin panel.
 
-![CleanShot 2025-11-26 at 23 39 02@2x](https://github.com/user-attachments/assets/388427e2-72c4-4caf-8bfd-d86c981b0bb2)
+The seed script will also create a demo user for demonstration purposes only:
 
-#### What's Included
+- Demo Author
+  - Email: `demo-author@payloadcms.com`
+  - Password: `password`
 
-The Railway template uses a custom WordPress Docker image (`ghcr.io/9d8dev/next-wp-wordpress`) with:
+> NOTICE: seeding the database is destructive because it drops your current database to populate a fresh one from the seed template. Only run this command if you are starting a new project or can afford to lose your current data.
 
-- **next-revalidate plugin** - Pre-installed and auto-activated for cache revalidation
-- **nextjs-headless theme** - Redirects WordPress frontend to your Next.js site
-- **WP-CLI** - Automated WordPress setup
-- **MySQL 8.0** - Database with persistent volume
-- **Next.js** - Your frontend application
+## Questions
 
-```
-┌─────────┐     ┌───────────┐     ┌─────────┐
-│  MySQL  │────▶│ WordPress │◀────│ Next.js │
-│   DB    │     │   (CMS)   │     │(Frontend)│
-└─────────┘     └───────────┘     └─────────┘
-```
-
-#### Deployment
-
-1. Click the **Deploy on Railway** button above
-2. Wait for all 3 services to deploy (MySQL, WordPress, Next.js)
-3. Note the WordPress and Next.js public URLs from the Railway dashboard
-
-#### Post-Deployment Setup
-
-**1. Complete WordPress Installation**
-
-1. Visit your WordPress URL (e.g., `https://wordpress-xxx.up.railway.app`)
-2. Complete the installation wizard:
-   - Site Title
-   - Admin Username
-   - Admin Password
-   - Admin Email
-3. Click "Install WordPress"
-
-**2. Configure the Revalidation Plugin**
-
-The `next-revalidate` plugin is pre-installed and activated.
-
-1. Go to WordPress Admin → **Settings** → **Next.js Revalidation**
-2. Enter your **Next.js URL** (e.g., `https://next-wp-xxx.up.railway.app`)
-3. Enter the **Webhook Secret**:
-   - In Railway, go to your Next.js service → Variables
-   - Copy the `WORDPRESS_WEBHOOK_SECRET` value
-   - Paste it in the plugin settings
-4. Click **Save**
-
-**3. Test the Setup**
-
-1. Create a test post in WordPress and publish it
-2. Visit your Next.js site - the post should appear
-3. Edit the post in WordPress
-4. Refresh the Next.js site - changes should appear (revalidation working)
-
-#### Customizing the Next.js Code
-
-By default, the template deploys from the `9d8dev/next-wp` repository. To customize:
-
-1. In Railway, click on the **Next.js service**
-2. Go to **Settings** → **Source** → **Upstream Repo**
-3. Click **"Eject"**
-4. Select your GitHub account/organization
-5. Click **"Eject service"**
-
-![CleanShot 2025-11-27 at 00 01 29@2x](https://github.com/user-attachments/assets/9e89bcc6-fcb8-412b-9611-f2ee85081ccb)
-
-Railway creates a copy of the repository in your GitHub. You can then:
-- Clone the repo locally
-- Make customizations (styling, components, pages)
-- Push changes → Railway auto-deploys
-
-### Vercel
-
-1. Click the **Deploy with Vercel** button above
-2. Fill in environment variables:
-   - `WORDPRESS_URL` - Your existing WordPress site URL
-   - `WORDPRESS_HOSTNAME` - WordPress domain (for images)
-   - `WORDPRESS_WEBHOOK_SECRET` - Generate a secure random string
-3. Deploy and wait for build to complete
-4. Install the revalidation plugin on your WordPress site
-5. Configure the plugin with your Vercel deployment URL
-
-### Local Development
-
-```bash
-# Install dependencies
-pnpm install
-
-# Copy environment template
-cp .env.example .env.local
-
-# Configure your WordPress connection in .env.local
-# Then start the dev server
-pnpm dev
-```
-
-**Required:** Your WordPress site must have the REST API enabled (default since WP 4.7).
-
-## WordPress API Functions
-
-All WordPress interactions are centralized in `lib/wordpress.ts`:
-
-### Posts
-```typescript
-getAllPosts(filters?)        // Get all posts (max 100)
-getPostsPaginated(page, perPage, filters?)  // Paginated posts
-getPostBySlug(slug)          // Single post by slug
-getPostById(id)              // Single post by ID
-```
-
-### Taxonomies
-```typescript
-getAllCategories()           // All categories
-getCategoryBySlug(slug)      // Category by slug
-getAllTags()                 // All tags
-getTagBySlug(slug)           // Tag by slug
-getPostsByCategory(id)       // Posts in category
-getPostsByTag(id)            // Posts with tag
-```
-
-### Authors & Pages
-```typescript
-getAllAuthors()              // All authors
-getAuthorBySlug(slug)        // Author by slug
-getPostsByAuthor(id)         // Posts by author
-getAllPages()                // All pages
-getPageBySlug(slug)          // Page by slug
-```
-
-### Example Usage
-```typescript
-import { getPostsPaginated } from "@/lib/wordpress";
-
-const { data: posts, headers } = await getPostsPaginated(1, 9, {
-  category: "news",
-  search: "nextjs"
-});
-
-console.log(`Found ${headers.total} posts across ${headers.totalPages} pages`);
-```
-
-## Cache Revalidation
-
-The starter uses Next.js cache tags for efficient revalidation:
-
-1. **Install the plugin** - Download [next-revalidate.zip](https://github.com/9d8dev/next-wp/releases/latest/download/next-revalidate.zip) and upload to WordPress
-2. **Configure** - Go to Settings > Next.js Revalidation
-3. **Set URL** - Enter your Next.js site URL
-4. **Set secret** - Use the same `WORDPRESS_WEBHOOK_SECRET` value
-
-When content changes in WordPress, only affected pages are revalidated.
-
-> **Note:** If using the Railway template, the plugin is pre-installed automatically.
-
-## Customization
-
-### Site Configuration
-
-Edit `site.config.ts` for site metadata:
-
-```typescript
-export const siteConfig = {
-  site_name: "Your Site",
-  site_domain: "yourdomain.com",
-  site_description: "Your site description"
-};
-```
-
-### Navigation
-
-Edit `menu.config.ts` for navigation links:
-
-```typescript
-export const mainMenu = [
-  { href: "/", label: "Home" },
-  { href: "/posts", label: "Blog" },
-  // Add more links...
-];
-```
-
-### Theming
-
-This project uses shadcn/ui with Tailwind CSS. Customize colors in your CSS or update the shadcn theme.
-
-## Troubleshooting
-
-### REST API not accessible
-- Ensure your WordPress site is publicly accessible
-- Check that permalinks are set (Settings > Permalinks)
-- Verify REST API at `your-site.com/wp-json/wp/v2/posts`
-
-### Images not loading
-- Add your WordPress domain to `WORDPRESS_HOSTNAME`
-- Check `next.config.ts` has the correct `remotePatterns`
-
-### Revalidation not working
-- Verify `WORDPRESS_WEBHOOK_SECRET` matches in both WordPress and Next.js
-- Check the plugin is activated in WordPress
-- Test the webhook endpoint at `/api/revalidate`
-
-### CORS errors
-- Install a CORS plugin on WordPress, or
-- Configure your server to allow requests from your Next.js domain
-
-## Scripts
-
-```bash
-pnpm dev       # Start development server
-pnpm build     # Build for production
-pnpm start     # Start production server
-pnpm lint      # Run ESLint
-```
-
-## Contributing
-
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-MIT License - see [LICENSE](LICENSE) for details.
-
-## Credits
-
-Built with [Next.js](https://nextjs.org/), [Tailwind CSS](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/), and [brijr/craft](https://craft-ds.com).
-
-Created by [Bridger Tower](https://twitter.com/bridgertower) and [Cameron Youngblood](https://twitter.com/youngbloodcyb) at [9d8](https://9d8.dev).
+If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
